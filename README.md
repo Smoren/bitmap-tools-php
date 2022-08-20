@@ -25,33 +25,33 @@ composer test
 #### Simple usage
 
 ```php
-use Smoren\BitmapTools\Helpers\BitmapHelper;
+use Smoren\BitmapTools\Models\Bitmap;
 
 // Let's create bitmaps from specified bit's positions:
-var_dump(BitmapHelper::create([0, 1, 2])); // 7
-var_dump(BitmapHelper::create([0, 2])); // 5
-var_dump(BitmapHelper::create([])); // 0
+$bm = Bitmap::create([0, 1, 2]);
+var_dump($bm->getValue()); // 7
+var_dump($bm->toArray()); // [0, 1, 2]
 
-// Let's parse bitmaps to get arrays of it's bit's positions:
-print_r(BitmapHelper::parse(7)); // [0, 1, 2]
-print_r(BitmapHelper::parse(5)); // [0, 2]
-print_r(BitmapHelper::parse(0)); // []
+$bm = Bitmap::create([0, 2]);
+var_dump($bm->getValue()); // 5
+var_dump($bm->toArray()); // [0, 2]
 
-// Intersections (you can specify arguments as bitmaps or arrays of bit positions):
-var_dump(BitmapHelper::intersects(7, 1)); // true
-var_dump(BitmapHelper::intersects([0, 1, 2], 1)); // true
-var_dump(BitmapHelper::intersects([0, 1, 2], [1, 2])); // true
+$bm = Bitmap::create([]);
+var_dump($bm->getValue()); // 0
+var_dump($bm->toArray()); // []
 
-var_dump(BitmapHelper::intersects(6, 0)); // false
-var_dump(BitmapHelper::intersects([1, 2], 1)); // true
-var_dump(BitmapHelper::intersects([0, 2], [1])); // true
+// Intersections:
+$bm = Bitmap::create(7);
+var_dump($bm->intersectsWith(Bitmap::create(1))); // true
+var_dump($bm->intersectsWith(Bitmap::create([1, 2]))); // true
 
-// Inclusions (you can specify arguments as bitmaps or arrays of bit positions):
-var_dump(BitmapHelper::includes(7, 1)); // true (in binary numbers: 111 includes 001)
-var_dump(BitmapHelper::includes([0, 1, 2], 1)); // true
-var_dump(BitmapHelper::includes(7, [0])); // true
+$bm = Bitmap::create(6);
+var_dump($bm->intersectsWith(Bitmap::create(1))); // true
+var_dump($bm->intersectsWith(Bitmap::create(0))); // false
 
-var_dump(BitmapHelper::includes(1, 7)); // false (in binary numbers: 001 not includes 111)
-var_dump(BitmapHelper::includes([0], 7)); // false
-var_dump(BitmapHelper::includes(1, [0, 1, 2])); // false
+// Inclusions:
+$bm = Bitmap::create(6);
+var_dump($bm->includes(Bitmap::create(2))); // true (in binary numbers: 110 includes 010)
+var_dump($bm->includes(Bitmap::create(1))); // false (in binary numbers: 110 not includes 001)
+var_dump($bm->includes(Bitmap::create(3))); // false (in binary numbers: 110 not includes 011)
 ```

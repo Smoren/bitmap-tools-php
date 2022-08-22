@@ -8,7 +8,7 @@ interface BitmapInterface
 {
     /**
      * Creates Bitmap instance from one of int value, list of true bits or another Bitmap instance
-     * @param int|array<int>|Bitmap $value value (e. g. 5 or [0, 2])
+     * @param Bitmap|int|array<int> $value value (e. g. 5 or [0, 2])
      * @return BitmapInterface
      */
     public static function create($value): BitmapInterface;
@@ -21,6 +21,13 @@ interface BitmapInterface
     public static function createFromArray(array $bits): BitmapInterface;
 
     /**
+     * Converts argument value to Bitmap instance
+     * @param BitmapInterface|int|array<int> $bitmap value to convert
+     * @return BitmapInterface
+     */
+    public static function toBitmap($bitmap): BitmapInterface;
+
+    /**
      * Getter for value field
      * @return int
      */
@@ -28,17 +35,38 @@ interface BitmapInterface
 
     /**
      * Returns true if this bitmap has intersection with another one
-     * @param BitmapInterface $bitmap another bitmap
+     * @param BitmapInterface|int|array<int> $bitmap another bitmap
      * @return bool
      */
-    public function intersectsWith(BitmapInterface $bitmap): bool;
+    public function intersectsWith($bitmap): bool;
 
     /**
      * Returns true if this bitmap includes another one
-     * @param BitmapInterface $bitmap another bitmap
+     * @param BitmapInterface|int|array<int> $bitmap another bitmap
      * @return bool
      */
-    public function includes(BitmapInterface $bitmap): bool;
+    public function includes($bitmap): bool;
+
+    /**
+     * Returns true if this bitmap is equal with another one
+     * @param BitmapInterface|int|array<int> $bitmap another bitmap
+     * @return bool
+     */
+    public function isEqualWith($bitmap): bool;
+
+    /**
+     * Returns new Bitmap instance by bitwise addition with another bitmap
+     * @param BitmapInterface|int|array<int> $bitmap another bitmap
+     * @return BitmapInterface
+     */
+    public function add($bitmap): BitmapInterface;
+
+    /**
+     * Returns new Bitmap instance by bitwise subtraction with another bitmap
+     * @param BitmapInterface|int|array<int> $bitmap another bitmap
+     * @return BitmapInterface
+     */
+    public function sub($bitmap): BitmapInterface;
 
     /**
      * Returns true if this bitmap has true bit on given position
@@ -46,27 +74,6 @@ interface BitmapInterface
      * @return bool
      */
     public function hasBit(int $bitPosition): bool;
-
-    /**
-     * Returns true if this bitmap is equal with another one
-     * @param BitmapInterface $bitmap another bitmap
-     * @return bool
-     */
-    public function isEqualWith(BitmapInterface $bitmap): bool;
-
-    /**
-     * Returns new Bitmap instance by bitwise addition with another bitmap
-     * @param BitmapInterface $bitmap another bitmap
-     * @return BitmapInterface
-     */
-    public function add(BitmapInterface $bitmap): BitmapInterface;
-
-    /**
-     * Returns new Bitmap instance by bitwise subtraction with another bitmap
-     * @param BitmapInterface $bitmap another bitmap
-     * @return BitmapInterface
-     */
-    public function sub(BitmapInterface $bitmap): BitmapInterface;
 
     /**
      * Returns an array of true bit positions

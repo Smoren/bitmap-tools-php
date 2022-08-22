@@ -123,36 +123,36 @@ class BitmapTest extends \Codeception\Test\Unit
         $this->assertTrue($bm->hasBit(3));
     }
 
-    public function testAdd()
+    public function testAddSub()
     {
         $bm = Bitmap::create([]);
 
         $bm = $bm->add(Bitmap::create([1]));
         $this->assertEquals([1], $bm->toArray());
 
-        $bm = $bm->add(Bitmap::create([0]));
+        $bm = $bm->add([0]);
         $this->assertEquals([0, 1], $bm->toArray());
 
-        $bm = $bm->add(Bitmap::create([2]));
+        $bm = $bm->add([2]);
         $this->assertEquals([0, 1, 2], $bm->toArray());
 
         $bm = $bm->add(Bitmap::create([1, 2]));
         $this->assertEquals([0, 1, 2], $bm->toArray());
 
-        $bm = $bm->sub(Bitmap::create([1, 2, 3]));
+        $bm = $bm->sub([1, 2, 3]);
         $this->assertEquals([0], $bm->toArray());
 
-        $bm = $bm->sub(Bitmap::create([0, 1]));
+        $bm = $bm->sub([0, 1]);
         $this->assertEquals([], $bm->toArray());
     }
 
     protected function intersectionExists($lhs, $rhs): bool
     {
-        return Bitmap::create($lhs)->intersectsWith(Bitmap::create($rhs));
+        return Bitmap::create($lhs)->intersectsWith($rhs);
     }
 
     protected function inclusionExists($lhs, $rhs): bool
     {
-        return Bitmap::create($lhs)->includes(Bitmap::create($rhs));
+        return Bitmap::create($lhs)->includes($rhs);
     }
 }

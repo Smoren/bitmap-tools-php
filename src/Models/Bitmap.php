@@ -42,6 +42,14 @@ class Bitmap implements BitmapInterface
     }
 
     /**
+     * @inheritDoc
+     */
+    public static function toBitmap($bitmap): BitmapInterface
+    {
+        return ($bitmap instanceof BitmapInterface) ? $bitmap : static::create($bitmap);
+    }
+
+    /**
      * Bitmap constructor.
      * @param int $value bitmap value
      */
@@ -61,17 +69,46 @@ class Bitmap implements BitmapInterface
     /**
      * @inheritDoc
      */
-    public function intersectsWith(BitmapInterface $bitmap): bool
+    public function intersectsWith($bitmap): bool
     {
+        $bitmap = static::toBitmap($bitmap);
         return ($this->getValue() & $bitmap->getValue()) !== 0;
     }
 
     /**
      * @inheritDoc
      */
-    public function includes(BitmapInterface $bitmap): bool
+    public function includes($bitmap): bool
     {
+        $bitmap = static::toBitmap($bitmap);
         return ($this->getValue() & $bitmap->getValue()) === $bitmap->getValue();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isEqualWith($bitmap): bool
+    {
+        $bitmap = static::toBitmap($bitmap);
+        return $this->getValue() === $bitmap->getValue();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function add($bitmap): BitmapInterface
+    {
+        $bitmap = static::toBitmap($bitmap);
+        return new static($this->getValue() | $bitmap->getValue());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function sub($bitmap): BitmapInterface
+    {
+        $bitmap = static::toBitmap($bitmap);
+        return new static($this->getValue() & (~$bitmap->getValue()));
     }
 
     /**
@@ -80,30 +117,6 @@ class Bitmap implements BitmapInterface
     public function hasBit(int $bitPosition): bool
     {
         return $this->intersectsWith(Bitmap::createFromArray([$bitPosition]));
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function isEqualWith(BitmapInterface $bitmap): bool
-    {
-        return $this->getValue() === $bitmap->getValue();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function add(BitmapInterface $bitmap): BitmapInterface
-    {
-        return new static($this->getValue() | $bitmap->getValue());
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function sub(BitmapInterface $bitmap): BitmapInterface
-    {
-        return new static($this->getValue() & (~$bitmap->getValue()));
     }
 
     /**
